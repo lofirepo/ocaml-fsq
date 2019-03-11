@@ -1,0 +1,6 @@
+(library
+ (name fsq)
+ (public_name fsq)
+ (modules fsq)
+ (libraries psq)
+)

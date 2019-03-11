@@ -1,0 +1,8 @@
+(test
+ (name test_fsq)
+ (package fsq)
+ (libraries
+  fsq
+  oUnit
+ )
+)

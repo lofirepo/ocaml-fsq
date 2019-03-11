@@ -1,0 +1,24 @@
+opam-version: "2.0"
+name: "fsq"
+synopsis: "FSQ: Functional Fixed-size Search Queues"
+maintainer: "TG x Thoth <*@tg-x.net>"
+authors: ["TG x Thoth <*@tg-x.net>"]
+tags: [ "fixed-size" "search" "queue" "map" ]
+license: "MPL-2.0"
+homepage: "https://github.com/p2pcollab/ocaml-fsq"
+doc: "https://p2pcollab.github.io/doc/fsq/"
+dev-repo: "git+https://github.com/p2pcollab/ocaml-fsq.git"
+bug-reports: "https://github.com/p2pcollab/ocaml-fsq/issues"
+depends:
+[
+  "dune" {build & >= "1.0.0"}
+  "psq"
+  "ounit" {with-test}
+]
+build: [
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "-p" name "-j" jobs]
+]
+run-test: [
+  ["dune" "runtest" "-p" name "-j" jobs]
+]
