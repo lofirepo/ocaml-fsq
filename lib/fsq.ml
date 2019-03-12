@@ -59,29 +59,32 @@ module Make (K: Ordered) : S with type k = K.t = struct
       | _ -> None
 
   let push k t =
-    let t =
-      if t.maxp + PsqK.size t.psq < max_int || PsqK.mem k t.psq
+    if PsqK.mem k t.psq then
+      t
+    else
+      let t =
+        if t.maxp + PsqK.size t.psq < max_int
+        then t
+        else (* shift priorities down starting from min_int again *)
+          let minp = match PsqK.min t.psq with
+            | Some (_k,p) -> p
+            | None -> min_int in
+          let d = minp - min_int in
+          PsqK.fold
+            (fun k p t ->
+              { t with
+                psq = PsqK.adjust (fun p -> p - d) k t.psq;
+                maxp = p - d })
+            t t.psq in
+      let maxp = t.maxp + 1 in
+      let psq = PsqK.add k maxp t.psq in
+      let t = { t with psq; maxp } in
+      if PsqK.size t.psq <= t.len
       then t
-      else (* shift priorities down starting from min_int again *)
-        let minp = match PsqK.min t.psq with
-          | Some (_k,p) -> p
-          | None -> min_int in
-        let d = minp - min_int in
-        PsqK.fold
-          (fun k p t ->
-            { t with
-              psq = PsqK.adjust (fun p -> p - d) k t.psq;
-              maxp = p - d })
-          t t.psq in
-    let maxp = t.maxp + 1 in
-    let psq = PsqK.add k maxp t.psq in
-    let t = { t with psq; maxp } in
-    if PsqK.size t.psq <= t.len
-    then t
-    else { t with
-           psq = match PsqK.pop t.psq with
-                 | Some ((_k, _p), q) -> q
-                 | _ -> t.psq }
+      else { t with
+             psq = match PsqK.pop t.psq with
+                   | Some ((_k, _p), q) -> q
+                   | _ -> t.psq }
 
   let fold f z t =
     let minp = match PsqK.min t.psq with
