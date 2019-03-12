@@ -2,8 +2,11 @@
 
 # FSQ: Functional Fixed-size Search Queues
 
-FSQ is an OCaml implementation of functional fixed-size search queues.
-It is based on [Priority Search Queues](https://github.com/pqwy/psq).
+FSQ is an OCaml implementation of functional fixed-size search queues,
+where old elements get popped from the queue
+when pushing to a queue that reached its maximum size.
+
+This implementation is based on [Priority Search Queues](https://github.com/pqwy/psq).
 
 FSQ is distributed under the MPL-2.0 license.
 
