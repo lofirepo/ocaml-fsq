@@ -107,9 +107,9 @@ module Make (K: Ordered) : S with type k = K.t = struct
       (PsqK.to_list t.psq)
 
   let of_list len ks =
-    let psq = PsqK.of_sorted_list @@
-                List.mapi (fun p k -> (k, min_int + p + 1)) ks in
-    let maxp = min_int + List.length ks in
-    { psq; maxp; len }
+    List.fold_left
+      (fun t k -> push k t)
+      (empty len)
+      ks
 
 end
