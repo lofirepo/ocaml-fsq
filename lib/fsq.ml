@@ -60,7 +60,7 @@ module Make (K: Ordered) : S with type k = K.t = struct
 
   let push k t =
     let t =
-      if t.maxp + PsqK.size t.psq < max_int
+      if t.maxp + PsqK.size t.psq < max_int || PsqK.mem k t.psq
       then t
       else (* shift priorities down starting from min_int again *)
         let minp = match PsqK.min t.psq with

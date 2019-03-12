@@ -10,7 +10,8 @@ module type S = sig
   (** Keys in {{!t}[t]}. *)
 
   val empty : int -> t
-  (** [empty] is the search queue that contains no elements. *)
+  (** [empty max_size] is the search queue with [max_size]
+      that contains no elements. *)
 
   val is_empty : t -> bool
   (** [is_empty t] is [true] iff [t] is {{!empty}[empty]}. *)
@@ -22,24 +23,29 @@ module type S = sig
   (** [find k t] is [true] iff [k] exists in [t]. *)
 
   val push : k -> t -> t
-  (** [push k t] is [t] with [k] added to the end of the queue *)
+  (** [push k t] is [t] with [k] added to the queue.
+      If the queue reached [max_size],
+      the oldest element is [pop]ped from the queue.
+      If [k] already exists in [t], no operation is performed *)
 
   val pop : t -> (k * t) option
   (** [pop t] is [(min t, rest t)], or [None]. *)
 
   val fold : (k -> int -> 'a -> 'a) -> 'a -> t -> 'a
   (** [fold f z t] is [f k0 p0 (f k1 p1 ... (f kn pn z))].
-      Elements are folded over in key-ascending order
+      Elements are folded over in insertion order
       where p is the index of the element starting from 0. *)
 
   val iter : (k -> int -> unit) -> t -> unit
-  (** [iter f t] applies [f] to all elements in [t] in key-ascending order. *)
+  (** [iter f t] applies [f] to all elements in [t] in insertion order. *)
 
   val to_list : t -> k list
-  (** [to_list t] are all the elements in [t] in key-ascending order. *)
+  (** [to_list t] are all the elements in [t] in insertion order. *)
 
   val of_list : int -> k list -> t
-  (** [of_list ks] is a [t] with the elements from [ks]. *)
+  (** [of_list max_size ks] is a [t] of [max_size] with the elements from [ks].
+      The elements are [push]ed to to the queue from the beginning of the list,
+      thus the last [max_size] elements from the list would end up in the queue. *)
 
 end
 
