@@ -73,7 +73,7 @@ module Make (K: Ordered) : S with type k = K.t = struct
           PsqK.fold
             (fun k p t ->
               { t with
-                psq = PsqK.adjust (fun p -> p - d) k t.psq;
+                psq = PsqK.adjust k (fun p -> p - d) t.psq;
                 maxp = p - d })
             t t.psq in
       let maxp = t.maxp + 1 in
